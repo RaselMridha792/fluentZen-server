@@ -39,6 +39,13 @@ async function run() {
         res.send(result);
     })
 
+    // get all tutors 
+    app.get('/find-tutors', async(req, res)=>{
+      const tutors = tutorialsCollections.find()
+      const result = await tutors.toArray()
+      res.send(result)
+    })
+
 
     await client.db("admin").command({ ping: 1 });
     console.log(
