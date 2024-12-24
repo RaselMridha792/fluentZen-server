@@ -63,6 +63,12 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/my-booked-tutor', async(req, res)=>{
+      const tutors = bookedTutorCollections.find()
+      const result = await tutors.toArray()
+      res.send(result)
+    })
+
     // find my add tutorials by using email
     app.get("/my-tutorials", async(req, res)=>{
       const user = req.query.email;
@@ -98,6 +104,22 @@ async function run() {
         }
       }
       const result = await tutorialsCollections.updateOne(filter, updatedTutorial, options);
+      res.send(result)
+    });
+
+    // update the review bassed on user Given Rivew
+    app.patch("/tutor-review/:id", async(req, res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const tutorial = await tutorialsCollections.findOne(filter)
+      const reviewValue = tutorial.review+1
+      const options = {upsert: false}
+      const updatedReview = {
+        $set:{
+          review: reviewValue,
+        }
+      }
+      const result = await tutorialsCollections.updateOne(filter, updatedReview, options);
       res.send(result)
     })
 
