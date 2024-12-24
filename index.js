@@ -64,6 +64,16 @@ async function run() {
       res.send(result);
     })
 
+    // find my add tutorials by using email
+    app.get("/my-tutorials", async(req, res)=>{
+      const user = req.query.email;
+      const query = {email: user}
+      const result = await tutorialsCollections.find(query).toArray()
+      res.send(result)
+    })
+
+    
+
 
     await client.db("admin").command({ ping: 1 });
     console.log(
