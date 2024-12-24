@@ -72,7 +72,15 @@ async function run() {
       res.send(result)
     })
 
-    
+
+    // delete tutorials from collection by searching id
+    app.delete("/delete-tutorial/:id", async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await tutorialsCollections.deleteOne(query)
+      res.send(result)
+    })
+
 
 
     await client.db("admin").command({ ping: 1 });
