@@ -52,7 +52,6 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await tutorialsCollections.findOne(query);
-      console.log(result)
       res.send(result);
     })
 
@@ -78,6 +77,27 @@ async function run() {
       const id = req.params.id;
       const query = {_id : new ObjectId(id)}
       const result = await tutorialsCollections.deleteOne(query)
+      res.send(result)
+    })
+
+    // update a tutorial user added from the add tutorial page 
+    app.patch('/update-tutorial/:id', async(req, res)=>{
+      const id = req.params.id;
+      const tutorial = req.body;
+      const filter = {_id : new ObjectId(id)}
+      const options = {upsert: false}
+      const updatedTutorial = {
+        $set:{
+          name: tutorial.name,
+          email: tutorial.email,
+          image: tutorial.image,
+          language: tutorial.language,
+          price: tutorial.price,
+          description: tutorial.description,
+          review: tutorial.review,
+        }
+      }
+      const result = await tutorialsCollections.updateOne(filter, updatedTutorial, options);
       res.send(result)
     })
 
