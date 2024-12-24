@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,6 +29,7 @@ async function run() {
 
     // create db collection 
     const tutorialsCollections = client.db("FluentZen_admin").collection("FluentZen_Tutorials");
+    const bookedTutorCollections = client.db("FluentZen_admin").collection("my_booked_tutor");
 
 
     
@@ -44,6 +45,23 @@ async function run() {
       const tutors = tutorialsCollections.find()
       const result = await tutors.toArray()
       res.send(result)
+    })
+
+    // find tutorial by id
+    app.get("/tutor/details/:id", async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await tutorialsCollections.findOne(query);
+      console.log(result)
+      res.send(result);
+    })
+
+
+    // add booked tutor in a new collection
+    app.post("/booked-tutor", async(req, res)=>{
+      const tutors = req.body;
+      const result = await bookedTutorCollections.insertOne(tutors);
+      res.send(result);
     })
 
 
