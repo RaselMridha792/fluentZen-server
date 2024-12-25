@@ -64,7 +64,9 @@ async function run() {
     })
 
     app.get('/my-booked-tutor', async(req, res)=>{
-      const tutors = bookedTutorCollections.find()
+      const user = req.query.email;
+      const query = {email: user}
+      const tutors = bookedTutorCollections.find(query)
       const result = await tutors.toArray()
       res.send(result)
     })
@@ -120,6 +122,14 @@ async function run() {
         }
       }
       const result = await tutorialsCollections.updateOne(filter, updatedReview, options);
+      res.send(result)
+    })
+
+    // get data using categories 
+    app.get("/find-tutors/:category", async(req, res)=>{
+      const category = req.params.category;
+      const query = {language: category}
+      const result = await tutorialsCollections.find(query).toArray()
       res.send(result)
     })
 
