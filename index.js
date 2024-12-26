@@ -44,6 +44,9 @@ async function run() {
     const bookedTutorCollections = client
       .db("FluentZen_admin")
       .collection("my_booked_tutor");
+    const userCollections = client
+      .db("FluentZen_admin")
+      .collection("user_Collection");
 
     // jwt related api
     app.post("/jwt", (req, res) => {
@@ -96,6 +99,19 @@ async function run() {
       const result = await tutorialsCollections.insertOne(tutorial);
       res.send(result);
     });
+
+    app.post("/save-user", async(req, res)=>{
+      const users = req.body;
+      const result = await userCollections.insertOne(users);
+      res.send(result);
+    })
+
+    // get users
+    app.get('/get-users', async(req, res)=>{
+      const users = userCollections.find();
+      const result = await users.toArray();
+      res.send(result);
+    })
 
     // get all tutors
     app.get("/find-tutors", async (req, res) => {
